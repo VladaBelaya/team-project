@@ -1,13 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {ChartsDirective} from "./charts.directive";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { ChartComponent } from './chart/chart.component';
 import {ChartsComponent} from "./charts.component";
 
 
 
 @NgModule({
-  declarations: [ChartsComponent],
+  declarations: [
+    ChartsDirective,
+    ChartsComponent,
+    ChartComponent
+  ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatProgressSpinnerModule
   ]
 })
 export class ChartsModule { }
