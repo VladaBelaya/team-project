@@ -23,11 +23,11 @@ export class DataLoaderService {
   private data_layer_0_URL = 'api/test_data_layer0.json';
   private data_layer_1_URL = 'api/test_data_layer1.json';
 
-  get getData0(): any {
+  getData0() {
     return this._http.get<Data0[]>(this.data_layer_0_URL);
   }
 
-  get getData1(): any {
+  getData1() {
     return this._http.get<Data1[]>(this.data_layer_1_URL);
   }
 }
