@@ -9,6 +9,9 @@ import {MatIconModule} from "@angular/material/icon";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 import { HttpClientModule } from '@angular/common/http';
+import { ChartsComponent } from './charts/charts.component';
+import {TableModule} from "./table/table.module";
+import {ChartsModule} from "./charts/charts.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,10 +19,8 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    MatTableModule,
-    MatButtonModule,
-    MatIconModule,
-    BrowserAnimationsModule
+    TableModule,
+    ChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

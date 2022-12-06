@@ -1,8 +1,43 @@
-/* You can add global styles to this file, and also import other style files */
+// общие стили
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
+.container {
+  padding: 50px;
+  display: flex;
+}
+
+.aside {
+  margin-right: 50px;
+}
+
+.nav {
+  margin-top: 50px;
+  a {
+    display: block;
+    font-size: 20px;
+    color: #2d2d2d;
+    text-decoration: none;
+    transition: color .2s ease-in-out;
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+    &:hover {
+      color: #4269bd;
+    }
+    &.active {
+      color: #4269bd;
+    }
+  }
+}
+
+// для таблицы
 
 table {
   width: 100%;
@@ -58,31 +93,4 @@ tr.example-element-row:not(.example-expanded-row):active {
 
 .mdc-data-table__table {
   min-width: auto !important;
-}
-
-
-.container {
-  padding: 50px;
-  display: flex;
-}
-
-.aside {
-  margin-right: 50px;
-}
-
-.nav {
-  margin-top: 50px;
-  a {
-    display: block;
-    font-size: 20px;
-    color: #2d2d2d;
-    text-decoration: none;
-    transition: color .2s ease-in-out;
-    &:not(:last-child) {
-      margin-bottom: 20px;
-    }
-    &:hover {
-      color: #4269bd;
-    }
-  }
 }
