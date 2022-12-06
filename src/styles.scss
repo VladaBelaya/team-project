@@ -94,3 +94,13 @@ tr.example-element-row:not(.example-expanded-row):active {
 .mdc-data-table__table {
   min-width: auto !important;
 }
+
+//spinner
+
+.mat-mdc-progress-spinner {
+  width: 70px !important;
+  height: 70px !important;
+  .mdc-circular-progress__indeterminate-circle-graphic {
+    stroke: #3376ff !important;
+  }
+}

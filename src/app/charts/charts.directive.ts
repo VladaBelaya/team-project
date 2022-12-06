@@ -1,12 +1,13 @@
 import {AfterViewInit, Directive, ElementRef, Input} from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import {Data} from "./charts.component";
+
+import {ChartConfig} from "../services/charts.service";
 
 @Directive({
   selector: '[appChart]',
 })
 export class ChartsDirective implements AfterViewInit {
-  @Input() public data!: Data;
+  @Input() public data!: ChartConfig;
 
   constructor(private readonly el: ElementRef<HTMLCanvasElement>) {
     Chart.register(...registerables);
@@ -16,19 +17,9 @@ export class ChartsDirective implements AfterViewInit {
   }
 
   private initChart() {
-      new Chart(this.el.nativeElement, {
+    new Chart(this.el.nativeElement, {
         type: 'line',
-        data: {
-          labels: [1, 2, 3, 4, 5, 6, 7],
-          datasets: [
-            {
-              label: 'wh_id',
-              data: [65, 59, 80, 81, 56, 55, 40],
-              borderColor: 'rgb(75, 192, 192)',
-              fill: false
-            }
-          ]
-        },
+        data: this.data,
 
         options: {
           elements: {
@@ -42,7 +33,7 @@ export class ChartsDirective implements AfterViewInit {
           plugins: {
             title: {
               display: true,
-              text: 'График',
+              text: `ID склада: ${this.data.name}`,
               color: '#1E212C',
               font: {
                 size: 30,

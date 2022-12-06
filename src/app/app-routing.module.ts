@@ -4,14 +4,16 @@ import { TableComponent } from "./table/table.component";
 import {ChartsComponent} from "./charts/charts.component";
 
 const routes: Routes = [
-  {
-    path: 'table',
-    component: TableComponent
-  },
-  {
-    path: 'charts',
-    loadChildren: () => import('./charts/charts.module').then(m => m.ChartsModule)
-  },
+  // {
+  //  path: 'data',
+// loadChildren: () => import('./data/data.module').then(m => m.DataModule)
+  //},
+  //{
+  //  path: 'graphs',
+//  loadChildren: () => import('./graphs/graphs.module').then(m => m.GraphsModule)
+  //},
+  { path: 'table', component: TableComponent },
+  { path: 'charts', component: ChartsComponent }
 ];
 
 @NgModule({
