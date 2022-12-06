@@ -1,1 +1,13 @@
-<h1>Здесь будут графики</h1>
+<div class="charts-container">
+  <ng-container *ngIf="data as charts; else loading">
+    <div class="charts">
+      <app-chart *ngFor="let chart of charts" [chart]="chart"></app-chart>
+    </div>
+  </ng-container>
+  <ng-template #loading>
+    <div class="block">
+      <mat-spinner></mat-spinner>
+      <div class="text">Загружаю графики...</div>
+    </div>
+  </ng-template>
+</div>
