@@ -1,5 +1,5 @@
 <div class="charts-container">
-  <ng-container *ngIf="data as charts; else loading">
+  <ng-container *ngIf="charts$ | async as charts; else loading">
     <div class="charts">
       <app-chart *ngFor="let chart of charts" [chart]="chart"></app-chart>
     </div>
