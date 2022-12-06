@@ -8,10 +8,10 @@ export interface Data0 {
 }
 
 export interface Data1 {
-  office_id: number;
-  wh_id: number;
-  dt_date: string;
-  qty: number;
+  office_id: number | null;
+  wh_id: number | null;
+  dt_date: string | null;
+  qty: number | null;
 }
 
 @Injectable({
