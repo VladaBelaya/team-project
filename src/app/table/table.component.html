@@ -1,4 +1,4 @@
-<form [formGroup]="dateRange" (ngSubmit)="updateDates()">
+<form [formGroup]="dateRangeControl" (ngSubmit)="updateDates()">
   <mat-form-field appearance="outline">
     <mat-label>Enter a date range</mat-label>
     <mat-date-range-input
@@ -13,13 +13,14 @@
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-date-range-picker #picker></mat-date-range-picker>
   </mat-form-field>
+  <button mat-button>Update</button>
 </form>
 
-<p *ngIf="range">Selected range: {{ range.value | json }}</p>
+<p *ngIf="range">Selected range: {{ dateRange | json }}</p>
 
 <table
   mat-table
-  [dataSource]="officeData"
+  [dataSource]="officeData$"
   multiTemplateDataRows
   class="mat-elevation-z8 outer-table">
   <ng-container
@@ -35,9 +36,7 @@
         mat-icon-button
         aria-label="expand row"
         (click)="
-          expandedOffice === element
-            ? clearStorages()
-            : getStorages(element.office_id);
+          expandedOffice === element ? null : getStorages(element.office_id);
           expandedOffice = expandedOffice === element ? null : element;
           $event.stopPropagation()
         ">
@@ -62,7 +61,7 @@
         [@detailExpand]="element == expandedOffice ? 'expanded' : 'collapsed'">
         <table
           mat-table
-          [dataSource]="storageData"
+          [dataSource]="storageData$"
           multiTemplateDataRows
           class="mat-elevation-z8">
           <ng-container
@@ -81,7 +80,7 @@
                 aria-label="expand row"
                 (click)="
                   expandedStorage === element
-                    ? clearDatesAndQuantities()
+                    ? null
                     : getDatesAndQuantities(element.wh_id);
                   expandedStorage =
                     expandedStorage === element ? null : element;
@@ -110,7 +109,7 @@
                 ">
                 <table
                   mat-table
-                  [dataSource]="datesAndQuantitiesData"
+                  [dataSource]="datesAndQuantitiesData$"
                   multiTemplateDataRows
                   class="mat-elevation-z8">
                   <ng-container

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { DataLoaderService } from 'src/app/services/data-loader.service';
 import { Data1 } from 'src/app/services/data-loader.service';
+import { Range } from '../table.component';
 
 export interface TableData extends Data1 {}
 export interface Columns {
@@ -76,9 +77,35 @@ export class TableDataService {
     );
   }
 
-  getDatesAndQuantities(wh_id: number) {
+  getDatesAndQuantities(wh_id: number, range: Range) {
     return this.getAllData().pipe(
-      map((data) => data.filter((data) => data.wh_id === wh_id))
+      map((data) =>
+        data
+          .filter((datum) => datum.wh_id === wh_id)
+          .filter((datum) => {
+            const startDate = range.start;
+            const endDate = range.end;
+            const date = new Date(Date.parse(datum.dt_date!));
+            if (startDate && startDate.getTime() > date.getTime()) {
+              return false;
+            }
+            if (endDate && endDate.getTime() < date.getTime()) {
+              return false;
+            }
+            return true;
+          })
+          .map((datum) => {
+            const date = new Date(Date.parse(datum.dt_date!));
+            const result = date.toLocaleDateString('en-GB', {
+              // you can use undefined as first argument
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            });
+            datum.dt_date = result;
+            return datum;
+          })
+      )
     );
   }
 }

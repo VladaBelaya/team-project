@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
   animate,
   state,
@@ -8,6 +8,12 @@ import {
 } from '@angular/animations';
 import { TableDataService, TableData } from './services/table-data.service';
 import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
+import { Observable, tap } from 'rxjs';
+
+export interface Range {
+  start: Date | null;
+  end: Date | null;
+}
 
 @Component({
   selector: 'app-table',
@@ -25,9 +31,10 @@ import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
   ],
 })
 export class TableComponent implements OnInit {
-  officeData!: TableData[];
-  storageData!: TableData[];
-  datesAndQuantitiesData!: TableData[];
+  officeData$!: Observable<TableData[]>;
+  storageData$!: Observable<TableData[]>;
+  datesAndQuantitiesData$!: Observable<TableData[]>;
+  currentWhId!: number;
   columnsToDisplay = this._tableData.COLUMNNAMES;
   columnNames = this.columnsToDisplay.map((column) => column.id);
   columnsToDisplayWithExpand = [
@@ -37,15 +44,17 @@ export class TableComponent implements OnInit {
   expandedOffice!: TableData | null;
   expandedStorage!: TableData | null;
 
-  dateRange = new FormGroup({
+  dateRangeControl = new FormGroup({
     range: new FormGroup({
       start: new FormControl<Date | null>(null),
       end: new FormControl<Date | null>(null),
     }),
   });
 
+  dateRange: Range = this.range!.value;
+
   get range() {
-    return this.dateRange.get('range');
+    return this.dateRangeControl.get('range');
   }
 
   minDate: Date;
@@ -61,26 +70,23 @@ export class TableComponent implements OnInit {
     this.maxDate = new Date(currentDate);
   }
 
-  updateDates() {}
-
-  getStorages(office_id: number) {
-    this._tableData.getStorages(office_id).subscribe((data) => {
-      this.storageData = data;
-    });
+  updateDates() {
+    this.dateRange = this.range!.value;
+    if (this.currentWhId) {
+      this.getDatesAndQuantities(this.currentWhId);
+    }
   }
 
-  clearStorages() {
-    this.storageData = [];
+  getStorages(office_id: number) {
+    this.storageData$ = this._tableData.getStorages(office_id).pipe(tap());
   }
 
   getDatesAndQuantities(wh_id: number) {
-    this._tableData.getDatesAndQuantities(wh_id).subscribe((data) => {
-      this.datesAndQuantitiesData = data;
-    });
-  }
-
-  clearDatesAndQuantities() {
-    this.datesAndQuantitiesData = [];
+    this.currentWhId = wh_id;
+    this.datesAndQuantitiesData$ = this._tableData.getDatesAndQuantities(
+      wh_id,
+      this.dateRange
+    );
   }
 
   openChart(wh_id: number) {
@@ -88,8 +94,6 @@ export class TableComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._tableData.getOffices().subscribe((data) => {
-      this.officeData = data;
-    });
+    this.officeData$ = this._tableData.getOffices();
   }
 }
