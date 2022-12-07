@@ -77,23 +77,33 @@ export class TableDataService {
   }
 
   getDatesAndQuantities(wh_id: number, range: Range) {
-    return this._http.get<Data1[]>(`warehouses?wh_id=${wh_id}`).pipe(
-      shareReplay(1),
-      map((data) =>
-        data
-          .filter((datum) => {
-            const startDate = range.start;
-            const endDate = range.end;
-            const date = new Date(Date.parse(datum.dt_date!));
-            if (startDate && startDate.getTime() > date.getTime()) {
-              return false;
-            }
-            if (endDate && endDate.getTime() < date.getTime()) {
-              return false;
-            }
-            return true;
-          })
-          .map((datum) => {
+    const from = range.start
+      ? `&dt_date_gte=${range.start.getFullYear()}-${
+          range.start.getMonth() + 1 < 10
+            ? '0' + (range.start.getMonth() + 1)
+            : range.start.getMonth()
+        }-${
+          range.start.getDate() < 10
+            ? '0' + range.start.getDate()
+            : range.start.getDate()
+        }`
+      : '';
+    const to = range.end
+      ? `&dt_date_lte=${range.end.getFullYear()}-${
+          range.end.getMonth() + 1 < 10
+            ? '0' + (range.end.getMonth() + 1)
+            : range.end.getMonth()
+        }-${
+          range.end.getDate() < 10
+            ? '0' + range.end.getDate()
+            : range.end.getDate()
+        }`
+      : '';
+    return this._http
+      .get<Data1[]>(`warehouses?wh_id=${wh_id}${from}${to}`)
+      .pipe(
+        map((data) =>
+          data.map((datum) => {
             const date = new Date(Date.parse(datum.dt_date!));
             const result = date.toLocaleDateString('en-GB', {
               // you can use undefined as first argument
@@ -104,7 +114,8 @@ export class TableDataService {
             datum.dt_date = result;
             return datum;
           })
-      )
-    );
+        ),
+        shareReplay(1)
+      );
   }
 }
