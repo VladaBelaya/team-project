@@ -1,14 +1,8 @@
-import { Injectable } from '@angular/core';
-import { ChartsModule } from '../charts/charts.module';
-import { DataLoaderService } from './data-loader.service';
-import { map, Observable, shareReplay, tap } from 'rxjs';
-
-export enum ChartFilters {
-  ORDER = 'qty_orders',
-  NEW = 'qty_new',
-  DELIVERED = 'qty_delivered',
-  RETURN = 'qty_return',
-}
+import {Injectable} from '@angular/core';
+import {ChartsModule} from '../charts/charts.module';
+import {DataLoaderService} from './data-loader.service';
+import {map, Observable, shareReplay, tap} from 'rxjs';
+import {HttpClient} from "@angular/common/http";
 
 interface Data1 {
   office_id: number;
@@ -46,36 +40,38 @@ export class ChartsService {
   public shareData$ = this._dataLoader.getData1().pipe(
     tap((result: any) => {
       this.initialData.push(...result);
-      console.log(result);
     }),
     shareReplay(1)
   );
 
-  constructor(private readonly _dataLoader: DataLoaderService) {
+  constructor(
+    private readonly _dataLoader: DataLoaderService,
+    private readonly _http: HttpClient,
+  ) {
     this.charts$ = this.shareData$.pipe(
-      map(
-        (response) =>
-          [
-            ...this.groupById(
+      map((response) => {
+          return [
+            ...this.groupByWhId(
               this.groupByKey(response, (response: Data1) => response.wh_id)
             ),
           ] as [ChartConfig]
+        }
       )
     );
   }
 
-  public groupById(data: DataArgumentId): ChartConfig[] {
+  public groupByWhId(data: DataArgumentId): ChartConfig[] {
     return Object.keys(data).map((id) =>
       data[id].reduce(
         (accumulator, current) => {
           accumulator.id = current.wh_id;
-          accumulator.name = String(current.wh_id);
+          accumulator.name = `ID склада: ${current.wh_id}`;
 
           accumulator.datasets[0].data.push(current.qty);
           if (current.dt_date != null) {
             accumulator.labels.push(current.dt_date);
           }
-          return { ...accumulator };
+          return {...accumulator};
         },
         {
           id,
@@ -90,6 +86,58 @@ export class ChartsService {
           name: '',
         } as ChartConfig
       )
+    );
+  }
+
+  public groupByOfficeId(data: DataArgumentId): ChartConfig[] {
+    return Object.keys(data).map((id) =>
+      data[id].reduce(
+        (accumulator, current) => {
+          accumulator.id = current.office_id;
+          accumulator.name = `ID офиса: ${current.office_id}`;
+
+          accumulator.datasets[0].data.push(current.qty);
+          if (current.dt_date != null) {
+            accumulator.labels.push(current.dt_date);
+          }
+          return {...accumulator};
+        },
+        {
+          id,
+          datasets: [
+            {
+              data: [],
+              label: 'Количество',
+              tension: 0.5,
+            },
+          ],
+          labels: [],
+          name: '',
+        } as ChartConfig
+      )
+    );
+  }
+
+  public getChartById(type: string, id: string): Observable<[ChartConfig]> {
+    return this._http.get<Data1[]>(`warehouses?${id}`).pipe(
+      map((response) => {
+          const searchParams = type === 'offices';
+          if (searchParams) {
+            return [
+              ...this.groupByOfficeId(
+                this.groupByKey(response, (response: Data1) => response.office_id)
+              ),
+            ] as [ChartConfig]
+          } else {
+            return [
+              ...this.groupByWhId(
+                this.groupByKey(response, (response: Data1) => response.wh_id)
+              ),
+            ] as [ChartConfig]
+          }
+
+        }
+      ),
     );
   }
 

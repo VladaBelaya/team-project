@@ -33,7 +33,7 @@ export class ChartsDirective implements AfterViewInit {
           plugins: {
             title: {
               display: true,
-              text: `ID склада: ${this.data.name}`,
+              text: this.data.name,
               color: '#1E212C',
               font: {
                 size: 30,

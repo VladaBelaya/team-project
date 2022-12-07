@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {
   animate,
   state,
@@ -6,10 +6,11 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { TableDataService } from './services/table-data.service';
-import { FormGroup, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { Data1 } from '../services/data-loader.service';
+import {TableDataService} from './services/table-data.service';
+import {FormGroup, FormControl} from '@angular/forms';
+import {Observable} from 'rxjs';
+import {Data1} from '../services/data-loader.service';
+import {Router} from "@angular/router";
 
 export interface Range {
   start: Date | null;
@@ -22,8 +23,8 @@ export interface Range {
   styleUrls: ['./table.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
       transition(
         'expanded <=> collapsed',
         animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
@@ -61,7 +62,10 @@ export class TableComponent implements OnInit {
   minDate: Date;
   maxDate: Date;
 
-  constructor(private _tableData: TableDataService) {
+  constructor(
+    private _tableData: TableDataService,
+    private readonly _router: Router
+  ) {
     const currentDate = new Date();
     this.minDate = new Date(
       currentDate.getFullYear(),
@@ -110,8 +114,25 @@ export class TableComponent implements OnInit {
     );
   }
 
-  openChart(wh_id: number) {
-    console.log(wh_id);
+  public getType(type: string): string {
+    switch (type) {
+      case 'Офис':
+        return 'offices'
+      case 'Склад':
+        return 'warehouses'
+      default:
+        return ''
+    }
+  }
+
+  openChart(type: string, id: string) {
+    type = this.getType(type)
+    this._router.navigate(['/charts'], {
+      queryParams: {
+        type,
+        id
+      }
+    })
   }
 
   ngOnInit() {

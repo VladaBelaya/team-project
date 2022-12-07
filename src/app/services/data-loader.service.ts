@@ -21,7 +21,7 @@ export class DataLoaderService {
   constructor(private _http: HttpClient) {}
 
   private data_layer_0_URL = 'api/test_data_layer0.json';
-  private data_layer_1_URL = 'api/test_data_layer1.json';
+  private data_layer_1_URL = 'warehouses';
 
   getData0() {
     return this._http.get<Data0[]>(this.data_layer_0_URL);
