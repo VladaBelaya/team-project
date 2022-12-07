@@ -1,23 +1,20 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { TableComponent } from "./table/table.component";
-import {ChartsComponent} from "./charts/charts.component";
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
 const routes: Routes = [
-  // {
-  //  path: 'data',
-// loadChildren: () => import('./data/data.module').then(m => m.DataModule)
-  //},
-  //{
-  //  path: 'graphs',
-//  loadChildren: () => import('./graphs/graphs.module').then(m => m.GraphsModule)
-  //},
-  { path: 'table', component: TableComponent },
-  { path: 'charts', component: ChartsComponent },
+  {
+    path: 'table',
+    loadChildren: () => import('./table/table.module').then(m => m.TableModule)
+  },
+  {
+    path: 'charts',
+    loadChildren: () => import('./charts/charts.module').then(m => m.ChartsModule)
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

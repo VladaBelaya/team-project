@@ -17,7 +17,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     TableModule,

@@ -4,6 +4,14 @@ import {ChartsDirective} from "./charts.directive";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { ChartComponent } from './chart/chart.component';
 import {ChartsComponent} from "./charts.component";
+import {RouterModule, Routes} from "@angular/router";
+
+const routes: Routes = [
+  {
+    path: '',
+    component: ChartsComponent
+  }
+];
 
 
 
@@ -15,6 +23,7 @@ import {ChartsComponent} from "./charts.component";
   ],
   imports: [
     CommonModule,
+    RouterModule.forChild(routes),
     MatProgressSpinnerModule
   ]
 })

@@ -36,7 +36,6 @@ export interface ChartConfig {
 export class ChartsService {
   public initialData: Data1[] = [];
   public charts$: Observable<[ChartConfig]>;
-  public lineChartLegend: boolean = true;
   public shareData$ = this._dataLoader.getData1().pipe(
     tap((result: any) => {
       this.initialData.push(...result);
