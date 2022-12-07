@@ -1,5 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, share, shareReplay } from 'rxjs';
 import { DataLoaderService } from 'src/app/services/data-loader.service';
 import { Data1 } from 'src/app/services/data-loader.service';
 import { Range } from '../table.component';
@@ -33,55 +34,53 @@ export class TableDataService {
     },
   ];
 
-  constructor(private _dataLoader: DataLoaderService) {}
+  constructor(
+    private _dataLoader: DataLoaderService,
+    private _http: HttpClient
+  ) {}
 
   getAllData(): Observable<Data1[]> {
     return this._dataLoader.getData1();
   }
 
-  getOffices(): Observable<TableData[]> {
-    return this.getAllData().pipe(
+  getOffices(): Observable<Data1[]> {
+    return this._http.get<Data1[]>('offices').pipe(
+      shareReplay(1),
       map((data) =>
-        Array.from(new Set(data.map((datum) => datum.office_id))).map(
-          (id) =>
-            <TableData>{
-              office_id: id,
-              dt_date: null,
-              qty: null,
-              wh_id: null,
+        Array.from(
+          data.reduce((output, current) => {
+            if (!current.office_id) {
+              return output;
             }
-        )
+            if (!output.has(String(current.office_id))) {
+              output.set(String(current.office_id), current);
+              return output;
+            }
+            const prevValue = output.get(String(current.office_id))!;
+            output.set(String(current.office_id), <Data1>{
+              wh_id: null,
+              qty: current.qty! + prevValue.qty!,
+              dt_date: current.dt_date,
+              office_id: current.office_id,
+            });
+            return output;
+          }, new Map<string, Data1>())
+        ).map((data) => data[1])
       )
     );
   }
 
   getStorages(office_id: number) {
-    return this.getAllData().pipe(
-      map((data) =>
-        Array.from(
-          new Set(
-            data
-              .filter((data) => data.office_id === office_id)
-              .map((datum) => datum.wh_id)
-          )
-        ).map(
-          (id) =>
-            <TableData>{
-              office_id: office_id,
-              dt_date: null,
-              qty: null,
-              wh_id: id,
-            }
-        )
-      )
-    );
+    return this._http
+      .get<Data1[]>(`offices?office_id=${office_id}`)
+      .pipe(shareReplay(1));
   }
 
   getDatesAndQuantities(wh_id: number, range: Range) {
-    return this.getAllData().pipe(
+    return this._http.get<Data1[]>(`warehouses?wh_id=${wh_id}`).pipe(
+      shareReplay(1),
       map((data) =>
         data
-          .filter((datum) => datum.wh_id === wh_id)
           .filter((datum) => {
             const startDate = range.start;
             const endDate = range.end;

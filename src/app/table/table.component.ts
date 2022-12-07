@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   animate,
   state,
@@ -6,9 +6,10 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { TableDataService, TableData } from './services/table-data.service';
-import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
-import { Observable, tap } from 'rxjs';
+import { TableDataService } from './services/table-data.service';
+import { FormGroup, FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { Data1 } from '../services/data-loader.service';
 
 export interface Range {
   start: Date | null;
@@ -31,9 +32,9 @@ export interface Range {
   ],
 })
 export class TableComponent implements OnInit {
-  officeData$!: Observable<TableData[]>;
-  storageData$!: Observable<TableData[]>;
-  datesAndQuantitiesData$!: Observable<TableData[]>;
+  officeData$!: Observable<Data1[]>;
+  storageData$!: Observable<Data1[]>;
+  datesAndQuantitiesData$!: Observable<Data1[]>;
   currentWhId!: number;
   columnsToDisplay = this._tableData.COLUMNNAMES;
   columnNames = this.columnsToDisplay.map((column) => column.id);
@@ -41,8 +42,8 @@ export class TableComponent implements OnInit {
     ...this.columnsToDisplay.map((column) => column.id),
     'expand',
   ];
-  expandedOffice!: TableData | null;
-  expandedStorage!: TableData | null;
+  expandedOffice!: Data1 | null;
+  expandedStorage!: Data1 | null;
 
   dateRangeControl = new FormGroup({
     range: new FormGroup({
@@ -77,8 +78,28 @@ export class TableComponent implements OnInit {
     }
   }
 
+  onExpandOffice(element: Data1, $event: MouseEvent) {
+    if (this.expandedOffice === element) {
+      this.expandedOffice = null;
+    } else {
+      this.expandedOffice = element;
+      this.getStorages(element.office_id!);
+    }
+    $event.stopPropagation();
+  }
+
   getStorages(office_id: number) {
-    this.storageData$ = this._tableData.getStorages(office_id).pipe(tap());
+    this.storageData$ = this._tableData.getStorages(office_id);
+  }
+
+  onExpandStorage(element: Data1, $event: MouseEvent) {
+    if (this.expandedStorage === element) {
+      this.expandedStorage = null;
+    } else {
+      this.expandedStorage = element;
+      this.getDatesAndQuantities(element.wh_id!);
+    }
+    $event.stopPropagation();
   }
 
   getDatesAndQuantities(wh_id: number) {

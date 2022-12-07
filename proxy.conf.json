@@ -2,5 +2,13 @@
   "/api": {
     "target": "http://127.0.0.1:8080/",
     "secure": false
+  },
+  "/offices": {
+    "target": "http://localhost:3000/",
+    "secure": false
+  },
+  "/warehouses": {
+    "target": "http://localhost:3000/",
+    "secure": false
   }
 }
