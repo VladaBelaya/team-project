@@ -10,19 +10,21 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule } from '@angular/material/core';
 import { GenericTableComponent } from './generic-table/generic-table.component';
+import {RouterLink} from "@angular/router";
 
 @NgModule({
   declarations: [TableComponent, GenericTableComponent],
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatDatepickerModule,
-    ReactiveFormsModule,
-    MatNativeDateModule,
-    BrowserAnimationsModule,
-  ],
+    imports: [
+        CommonModule,
+        MatTableModule,
+        MatButtonModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatDatepickerModule,
+        ReactiveFormsModule,
+        MatNativeDateModule,
+        BrowserAnimationsModule,
+        RouterLink,
+    ],
 })
 export class TableModule {}

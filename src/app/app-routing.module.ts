@@ -13,7 +13,7 @@ const routes: Routes = [
 //  loadChildren: () => import('./graphs/graphs.module').then(m => m.GraphsModule)
   //},
   { path: 'table', component: TableComponent },
-  { path: 'charts', component: ChartsComponent }
+  { path: 'charts', component: ChartsComponent },
 ];
 
 @NgModule({
