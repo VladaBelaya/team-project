@@ -1,0 +1,10 @@
+table {
+  td {
+    pointer-events: none;
+
+    button {
+      pointer-events: all;
+      margin-left: auto;
+    }
+  }
+}

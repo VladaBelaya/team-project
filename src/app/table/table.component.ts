@@ -35,7 +35,6 @@ export class TableComponent implements OnInit {
   ];
   expandedOffice!: TableData | null;
   expandedStorage!: TableData | null;
-  expandedDataAndQuantities!: TableData | null;
 
   constructor(private _tableData: TableDataService) {}
 
@@ -46,11 +45,19 @@ export class TableComponent implements OnInit {
     });
   }
 
+  clearStorages() {
+    this.storageData = [];
+  }
+
   getDatesAndQuantities(wh_id: number) {
     this._tableData.getDatesAndQuantities(wh_id).subscribe((data) => {
       this.datesAndQuantitiesData = data;
       console.log(this.datesAndQuantitiesData);
     });
+  }
+
+  clearDatesAndQuantities() {
+    this.datesAndQuantitiesData = [];
   }
 
   ngOnInit() {

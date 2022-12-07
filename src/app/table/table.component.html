@@ -1,8 +1,9 @@
+
 <table
   mat-table
   [dataSource]="officeData"
   multiTemplateDataRows
-  class="mat-elevation-z8">
+  class="mat-elevation-z8 outer-table">
   <ng-container
     matColumnDef="{{ column.id }}"
     *ngFor="let column of columnsToDisplay">
@@ -16,7 +17,9 @@
         mat-icon-button
         aria-label="expand row"
         (click)="
-          expandedOffice === element ? null : getStorages(element.office_id);
+          expandedOffice === element
+            ? clearStorages()
+            : getStorages(element.office_id);
           expandedOffice = expandedOffice === element ? null : element;
           $event.stopPropagation()
         ">
@@ -60,7 +63,7 @@
                 aria-label="expand row"
                 (click)="
                   expandedStorage === element
-                    ? null
+                    ? clearDatesAndQuantities()
                     : getDatesAndQuantities(element.wh_id);
                   expandedStorage =
                     expandedStorage === element ? null : element;
@@ -90,6 +93,7 @@
                 <table
                   mat-table
                   [dataSource]="datesAndQuantitiesData"
+                  multiTemplateDataRows
                   class="mat-elevation-z8">
                   <ng-container
                     matColumnDef="{{ column.id }}"
@@ -99,11 +103,47 @@
                       {{ element[column.id] }}
                     </td>
                   </ng-container>
+                  <ng-container matColumnDef="expand">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                      aria-label="row actions">
+                      &nbsp;
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <button
+                        mat-icon-button
+                        aria-label="expand row"
+                        (click)="
+                          expandedStorage === element
+                            ? clearDatesAndQuantities()
+                            : getDatesAndQuantities(element.wh_id);
+                          expandedStorage =
+                            expandedStorage === element ? null : element;
+                          $event.stopPropagation()
+                        ">
+                        <mat-icon *ngIf="expandedStorage !== element"
+                          >keyboard_arrow_down</mat-icon
+                        >
+                        <mat-icon *ngIf="expandedStorage === element"
+                          >keyboard_arrow_up</mat-icon
+                        >
+                      </button>
+                    </td>
+                  </ng-container>
 
                   <tr
                     mat-row
-                    *matRowDef="let element; columns: columnNames"
-                    class="example-element-row"></tr>
+                    *matRowDef="
+                      let element;
+                      columns: columnsToDisplayWithExpand
+                    "
+                    class="example-element-row"
+                    [class.example-expanded-row]="expandedStorage === element"
+                    (click)="
+                      expandedStorage =
+                        expandedStorage === element ? null : element
+                    "></tr>
                 </table>
               </div>
             </td>
