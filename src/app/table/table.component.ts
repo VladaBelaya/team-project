@@ -7,6 +7,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { TableDataService, TableData } from './services/table-data.service';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-table',
@@ -36,12 +37,16 @@ export class TableComponent implements OnInit {
   expandedOffice!: TableData | null;
   expandedStorage!: TableData | null;
 
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
   constructor(private _tableData: TableDataService) {}
 
   getStorages(office_id: number) {
     this._tableData.getStorages(office_id).subscribe((data) => {
       this.storageData = data;
-      console.log(this.storageData);
     });
   }
 
@@ -52,12 +57,15 @@ export class TableComponent implements OnInit {
   getDatesAndQuantities(wh_id: number) {
     this._tableData.getDatesAndQuantities(wh_id).subscribe((data) => {
       this.datesAndQuantitiesData = data;
-      console.log(this.datesAndQuantitiesData);
     });
   }
 
   clearDatesAndQuantities() {
     this.datesAndQuantitiesData = [];
+  }
+
+  openChart(wh_id: number) {
+    console.log(wh_id);
   }
 
   ngOnInit() {
