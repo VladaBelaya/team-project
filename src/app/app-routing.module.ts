@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NothingComponent } from './nothing/nothing.component';
 
 const routes: Routes = [
   {
@@ -12,10 +11,6 @@ const routes: Routes = [
     path: 'charts',
     loadChildren: () =>
       import('./charts/charts.module').then((m) => m.ChartsModule),
-  },
-  {
-    path: 'nothing',
-    component: NothingComponent,
   },
 ];
 
