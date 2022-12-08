@@ -57,7 +57,12 @@ export class TableDataService {
               return output;
             }
             if (!output.has(String(current.office_id))) {
-              output.set(String(current.office_id), current);
+              output.set(String(current.office_id), <Data1>{
+                wh_id: null,
+                qty: current.qty!,
+                dt_date: current.dt_date,
+                office_id: current.office_id,
+              });
               return output;
             }
             const prevValue = output.get(String(current.office_id))!;
@@ -116,6 +121,7 @@ export class TableDataService {
               day: '2-digit',
             });
             datum.dt_date = result;
+            datum.office_id = null;
             return datum;
           })
         ),

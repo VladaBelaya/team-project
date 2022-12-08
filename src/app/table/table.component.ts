@@ -8,7 +8,7 @@ import {
 } from '@angular/animations';
 import { Data1, TableDataService } from './services/table-data.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { delay, Observable } from 'rxjs';
+import { delay, Observable, shareReplay, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 export interface Range {
@@ -109,7 +109,7 @@ export class TableComponent implements OnInit {
     this.currentWhId = wh_id;
     this.datesAndQuantitiesData$ = this._tableData
       .getDatesAndQuantities(wh_id, this.dateRange)
-      .pipe(delay(350));
+      .pipe(tap(console.log), delay(350));
   }
 
   public getType(type: string): string {

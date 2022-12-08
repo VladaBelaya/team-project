@@ -70,14 +70,17 @@
               </td>
             </ng-container>
             <ng-template #td>
-              <td
-                (click)="
-                  openChart(column.name, element[column.id]);
-                  $event.stopPropagation()
-                "
-                mat-cell
-                *matCellDef="let element">
+              <td mat-cell *matCellDef="let element">
                 {{ element[column.id] }}
+                <a
+                  *ngIf="column.id === 'office_id'"
+                  (click)="
+                    openChart(column.name, element[column.id]);
+                    $event.stopPropagation()
+                  "
+                  mat-icon-button>
+                  <mat-icon>show_chart</mat-icon>
+                </a>
               </td>
             </ng-template>
           </ng-container>
@@ -130,6 +133,15 @@
                       </th>
                       <td mat-cell *matCellDef="let element">
                         {{ element[column.id] }}
+                        <a
+                          *ngIf="column.id === 'wh_id'"
+                          (click)="
+                            openChart('Склад', element.wh_id);
+                            $event.stopPropagation()
+                          "
+                          mat-icon-button>
+                          <mat-icon>show_chart</mat-icon>
+                        </a>
                       </td>
                     </ng-container>
                     <ng-container matColumnDef="expand">
@@ -139,17 +151,7 @@
                         aria-label="row actions">
                         &nbsp;
                       </th>
-                      <td mat-cell *matCellDef="let element">
-                        <a
-                          (click)="
-                            openChart('Склад', element.wh_id);
-                            $event.stopPropagation()
-                          "
-                          mat-icon-button
-                          aria-label="expand row">
-                          <mat-icon>show_chart</mat-icon>
-                        </a>
-                      </td>
+                      <td mat-cell *matCellDef="let element"></td>
                     </ng-container>
                     <tr
                       mat-row
