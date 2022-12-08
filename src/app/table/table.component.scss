@@ -8,3 +8,23 @@
   justify-content: flex-end;
   align-items: center;
 }
+
+.span  {
+  margin-right: 6px;
+}
+
+table {
+  .table {
+    .td:first-child {
+      display: flex;
+      align-items: center;
+    }
+
+  }
+  .table-last {
+    .td:nth-child(2) {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
