@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
   animate,
   state,
@@ -109,7 +109,7 @@ export class TableComponent implements OnInit {
     this.currentWhId = wh_id;
     this.datesAndQuantitiesData$ = this._tableData
       .getDatesAndQuantities(wh_id, this.dateRange)
-      .pipe(tap(console.log), delay(350));
+      .pipe(delay(350));
   }
 
   public getType(type: string): string {
