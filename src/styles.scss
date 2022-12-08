@@ -1,6 +1,7 @@
 // общие стили
 
-html, body {
+html,
+body {
   height: 100%;
 }
 body {
@@ -24,7 +25,7 @@ body {
     font-size: 20px;
     color: #2d2d2d;
     text-decoration: none;
-    transition: color .2s ease-in-out;
+    transition: color 0.2s ease-in-out;
     &:not(:last-child) {
       margin-bottom: 20px;
     }
@@ -41,6 +42,15 @@ body {
 
 table {
   width: 100%;
+
+  .block {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 700;
+  }
 }
 
 tr.example-detail-row {
@@ -117,7 +127,7 @@ tr.example-element-row:not(.example-expanded-row):active {
   color: #fff !important;
   background-color: #4269bd;
   font-size: 16px;
-  transition: background-color .2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
   &:hover {
     background-color: #5182f8;
   }
@@ -131,4 +141,3 @@ tr.example-element-row:not(.example-expanded-row):active {
   color: #626262;
   font-size: 12px;
 }
-
