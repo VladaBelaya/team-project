@@ -74,12 +74,15 @@ export class TableDataService {
             return output;
           }, new Map<string, Data1>())
         ).map((data) => data[1])
-      )
+      ),
+      shareReplay(1)
     );
   }
 
   getStorages(office_id: number) {
-    return this._http.get<Data1[]>(`offices?office_id=${office_id}`);
+    return this._http
+      .get<Data1[]>(`offices?office_id=${office_id}`)
+      .pipe(shareReplay(1));
   }
 
   getDatesAndQuantities(wh_id: number, range: Range) {
@@ -121,7 +124,8 @@ export class TableDataService {
             datum.office_id = null;
             return datum;
           })
-        )
+        ),
+        shareReplay(1)
       );
   }
 }
