@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, share, shareReplay } from 'rxjs';
-import { DataLoaderService } from 'src/app/services/data-loader.service';
 import { Data1 } from 'src/app/services/data-loader.service';
 import { Range } from '../table.component';
 
@@ -34,14 +33,7 @@ export class TableDataService {
     },
   ];
 
-  constructor(
-    private _dataLoader: DataLoaderService,
-    private _http: HttpClient
-  ) {}
-
-  getAllData(): Observable<Data1[]> {
-    return this._dataLoader.getData1();
-  }
+  constructor(private _http: HttpClient) {}
 
   getOffices(): Observable<Data1[]> {
     return this._http.get<Data1[]>('offices').pipe(
