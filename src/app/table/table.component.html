@@ -1,4 +1,4 @@
-<form [formGroup]="dateRangeControl" (ngSubmit)="updateDates()">
+<form [formGroup]="dateRangeControl" class="form" (ngSubmit)="updateDates()">
   <mat-form-field appearance="outline">
     <mat-label>Enter a date range</mat-label>
     <mat-date-range-input
@@ -13,7 +13,7 @@
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-date-range-picker #picker></mat-date-range-picker>
   </mat-form-field>
-  <button mat-button>Update</button>
+  <button class="btn" mat-button>Update</button>
 </form>
 
 <table

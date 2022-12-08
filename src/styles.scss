@@ -18,7 +18,7 @@ body {
 }
 
 .nav {
-  margin-top: 50px;
+  margin-top: 20px;
   a {
     display: block;
     font-size: 20px;
@@ -104,3 +104,31 @@ tr.example-element-row:not(.example-expanded-row):active {
     stroke: #3376ff !important;
   }
 }
+
+// btn material
+
+.mat-mdc-button:not(:disabled).btn {
+  margin-left: 20px;
+  margin-bottom: 32px;
+  height: auto;
+  display: inline-block;
+  padding: 18px 40px 19px;
+  border-radius: 4px;
+  color: #fff !important;
+  background-color: #4269bd;
+  font-size: 16px;
+  transition: background-color .2s ease-in-out;
+  &:hover {
+    background-color: #5182f8;
+  }
+}
+
+//calendar descr
+
+.mat-mdc-form-field-subscript-wrapper {
+  margin-top: 10px;
+  margin-left: 30px;
+  color: #626262;
+  font-size: 12px;
+}
+
