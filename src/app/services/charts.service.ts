@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {map, Observable, shareReplay, tap} from 'rxjs';
+import {Injectable, OnDestroy} from '@angular/core';
+import {map, Observable, ReplaySubject, shareReplay, takeUntil, tap} from 'rxjs';
 import {HttpClient} from "@angular/common/http";
 
 interface Data1 {
@@ -28,10 +28,10 @@ export interface ChartConfig {
   name: string;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
-export class ChartsService {
+@Injectable()
+export class ChartsService implements OnDestroy {
+  private destroy$ = new ReplaySubject(1)
+
   private data_layer_1_URL = 'warehouses';
   public initialData: Data1[] = [];
   public charts$: Observable<[ChartConfig]>;
@@ -39,7 +39,8 @@ export class ChartsService {
     tap((result: any) => {
       this.initialData.push(...result);
     }),
-    shareReplay(1)
+    shareReplay(1),
+    takeUntil(this.destroy$)
   );
 
   constructor(private readonly _http: HttpClient) {
@@ -53,6 +54,11 @@ export class ChartsService {
         }
       )
     );
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(1)
+    this.destroy$.complete()
   }
 
   public groupByWhId(data: DataArgumentId): ChartConfig[] {
