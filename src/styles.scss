@@ -44,12 +44,19 @@ table {
   width: 100%;
 
   .block {
-    margin: auto;
+    margin: 10px auto 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
     font-weight: 700;
+    .mat-mdc-progress-spinner {
+      width: 30px !important;
+      height: 30px !important;
+    }
+    .text {
+      font-weight: 400;
+    }
   }
 }
 
