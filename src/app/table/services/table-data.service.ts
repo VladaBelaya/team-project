@@ -49,7 +49,6 @@ export class TableDataService {
 
   getOffices(): Observable<Data1[]> {
     return this._http.get<Data1[]>('offices').pipe(
-      shareReplay(1),
       map((data) =>
         Array.from(
           data.reduce((output, current) => {
@@ -80,9 +79,7 @@ export class TableDataService {
   }
 
   getStorages(office_id: number) {
-    return this._http
-      .get<Data1[]>(`offices?office_id=${office_id}`)
-      .pipe(shareReplay(1));
+    return this._http.get<Data1[]>(`offices?office_id=${office_id}`);
   }
 
   getDatesAndQuantities(wh_id: number, range: Range) {
@@ -124,8 +121,7 @@ export class TableDataService {
             datum.office_id = null;
             return datum;
           })
-        ),
-        shareReplay(1)
+        )
       );
   }
 }

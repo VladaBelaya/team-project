@@ -8,7 +8,7 @@ import {
 } from '@angular/animations';
 import { Data1, TableDataService } from './services/table-data.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { delay, Observable, shareReplay, tap } from 'rxjs';
+import { delay, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 export interface Range {
