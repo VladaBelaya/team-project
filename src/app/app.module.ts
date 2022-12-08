@@ -13,9 +13,10 @@ import { ChartsComponent } from './charts/charts.component';
 import { TableModule } from './table/table.module';
 import { ChartsModule } from './charts/charts.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { NothingComponent } from './nothing/nothing.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, NothingComponent],
   imports: [
     BrowserAnimationsModule,
     AppRoutingModule,
