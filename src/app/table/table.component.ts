@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   animate,
   state,
@@ -6,10 +6,10 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import {Data1, TableDataService} from './services/table-data.service';
-import {FormGroup, FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {Router} from "@angular/router";
+import { Data1, TableDataService } from './services/table-data.service';
+import { FormGroup, FormControl } from '@angular/forms';
+import { delay, Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 export interface Range {
   start: Date | null;
@@ -22,8 +22,8 @@ export interface Range {
   styleUrls: ['./table.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition(
         'expanded <=> collapsed',
         animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
@@ -107,31 +107,30 @@ export class TableComponent implements OnInit {
 
   getDatesAndQuantities(wh_id: number) {
     this.currentWhId = wh_id;
-    this.datesAndQuantitiesData$ = this._tableData.getDatesAndQuantities(
-      wh_id,
-      this.dateRange
-    );
+    this.datesAndQuantitiesData$ = this._tableData
+      .getDatesAndQuantities(wh_id, this.dateRange)
+      .pipe(delay(350));
   }
 
   public getType(type: string): string {
     switch (type) {
       case 'Офис':
-        return 'offices'
+        return 'offices';
       case 'Склад':
-        return 'warehouses'
+        return 'warehouses';
       default:
-        return ''
+        return '';
     }
   }
 
   openChart(type: string, id: string) {
-    type = this.getType(type)
+    type = this.getType(type);
     this._router.navigate(['/charts'], {
       queryParams: {
         type,
-        id
-      }
-    })
+        id,
+      },
+    });
   }
 
   ngOnInit() {

@@ -111,51 +111,64 @@
                 [@detailExpand]="
                   element == expandedStorage ? 'expanded' : 'collapsed'
                 ">
-                <table
-                  mat-table
-                  *ngIf="expandedStorage"
-                  [dataSource]="datesAndQuantitiesData$"
-                  multiTemplateDataRows
-                  class="mat-elevation-z8">
-                  <ng-container
-                    matColumnDef="{{ column.id }}"
-                    *ngFor="let column of columnsToDisplay">
-                    <th mat-header-cell *matHeaderCellDef>{{ column.name }}</th>
-                    <td mat-cell *matCellDef="let element">
-                      {{ element[column.id] }}
-                    </td>
-                  </ng-container>
-                  <ng-container matColumnDef="expand">
-                    <th
-                      mat-header-cell
-                      *matHeaderCellDef
-                      aria-label="row actions">
-                      &nbsp;
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                      <a
-                        routerLink="/charts"
-                        [queryParams]="{ sklad: element.wh_id }"
-                        mat-icon-button
-                        aria-label="expand row">
-                        <mat-icon>show_chart</mat-icon>
-                      </a>
-                    </td>
-                  </ng-container>
-
-                  <tr
-                    mat-row
-                    *matRowDef="
-                      let element;
-                      columns: columnsToDisplayWithExpand
-                    "
-                    class="example-element-row"
-                    [class.example-expanded-row]="expandedStorage === element"
-                    (click)="
-                      expandedStorage =
-                        expandedStorage === element ? null : element
-                    "></tr>
-                </table>
+                <ng-container
+                  *ngIf="
+                    datesAndQuantitiesData$ | async as datesAndQuantities;
+                    else loading
+                  ">
+                  <table
+                    mat-table
+                    *ngIf="expandedStorage"
+                    [dataSource]="datesAndQuantities"
+                    multiTemplateDataRows
+                    class="mat-elevation-z8">
+                    <ng-container
+                      matColumnDef="{{ column.id }}"
+                      *ngFor="let column of columnsToDisplay">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ column.name }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element[column.id] }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="expand">
+                      <th
+                        mat-header-cell
+                        *matHeaderCellDef
+                        aria-label="row actions">
+                        &nbsp;
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        <a
+                          routerLink="/charts"
+                          [queryParams]="{ sklad: element.wh_id }"
+                          mat-icon-button
+                          aria-label="expand row">
+                          <mat-icon>show_chart</mat-icon>
+                        </a>
+                      </td>
+                    </ng-container>
+                    <tr
+                      mat-row
+                      *matRowDef="
+                        let element;
+                        columns: columnsToDisplayWithExpand
+                      "
+                      class="example-element-row"
+                      [class.example-expanded-row]="expandedStorage === element"
+                      (click)="
+                        expandedStorage =
+                          expandedStorage === element ? null : element
+                      "></tr>
+                  </table>
+                </ng-container>
+                <ng-template #loading>
+                  <div class="block">
+                    <mat-spinner></mat-spinner>
+                    <div class="text">Загружаю данные...</div>
+                  </div>
+                </ng-template>
               </div>
             </td>
           </ng-container>
