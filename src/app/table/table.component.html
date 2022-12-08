@@ -141,8 +141,10 @@
                       </th>
                       <td mat-cell *matCellDef="let element">
                         <a
-                          routerLink="/charts"
-                          [queryParams]="{ sklad: element.wh_id }"
+                          (click)="
+                            openChart('Склад', element.wh_id);
+                            $event.stopPropagation()
+                          "
                           mat-icon-button
                           aria-label="expand row">
                           <mat-icon>show_chart</mat-icon>
@@ -156,10 +158,8 @@
                         columns: columnsToDisplayWithExpand
                       "
                       class="example-element-row"
-                      [class.example-expanded-row]="expandedStorage === element"
-                      (click)="
-                        expandedStorage =
-                          expandedStorage === element ? null : element
+                      [class.example-expanded-row]="
+                        expandedStorage === element
                       "></tr>
                   </table>
                 </ng-container>
