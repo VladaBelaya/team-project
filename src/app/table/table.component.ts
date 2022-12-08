@@ -6,10 +6,9 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import {TableDataService} from './services/table-data.service';
+import {Data1, TableDataService} from './services/table-data.service';
 import {FormGroup, FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {Data1} from '../services/data-loader.service';
 import {Router} from "@angular/router";
 
 export interface Range {

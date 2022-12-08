@@ -1,6 +1,4 @@
 import {Injectable} from '@angular/core';
-import {ChartsModule} from '../charts/charts.module';
-import {DataLoaderService} from './data-loader.service';
 import {map, Observable, shareReplay, tap} from 'rxjs';
 import {HttpClient} from "@angular/common/http";
 
@@ -34,19 +32,17 @@ export interface ChartConfig {
   providedIn: 'root',
 })
 export class ChartsService {
+  private data_layer_1_URL = 'warehouses';
   public initialData: Data1[] = [];
   public charts$: Observable<[ChartConfig]>;
-  public shareData$ = this._dataLoader.getData1().pipe(
+  public shareData$ = this._http.get<Data1[]>(this.data_layer_1_URL).pipe(
     tap((result: any) => {
       this.initialData.push(...result);
     }),
     shareReplay(1)
   );
 
-  constructor(
-    private readonly _dataLoader: DataLoaderService,
-    private readonly _http: HttpClient,
-  ) {
+  constructor(private readonly _http: HttpClient) {
     this.charts$ = this.shareData$.pipe(
       map((response) => {
           return [
