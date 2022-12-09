@@ -98,7 +98,7 @@ export class ChartsService implements OnDestroy {
           accumulator.name = `ID офиса: ${current.office_id}`;
 
           accumulator.datasets[0].data.push(current.qty);
-          if (current.dt_date != null) {
+          if (current.dt_date != null && accumulator.labels.indexOf(current.dt_date) == -1) {
             accumulator.labels.push(current.dt_date);
           }
           return {...accumulator};
