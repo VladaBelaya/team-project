@@ -1,4 +1,3 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
   animate,
   state,
@@ -6,10 +5,11 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { Data1, TableDataService } from './services/table-data.service';
-import { FormGroup, FormControl } from '@angular/forms';
-import { delay, Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { delay, Observable } from 'rxjs';
+import { Data1, TableDataService } from './services/table-data.service';
 
 export interface Range {
   start: Date | null;

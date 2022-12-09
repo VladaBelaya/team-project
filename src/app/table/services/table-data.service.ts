@@ -79,13 +79,13 @@ export class TableDataService {
     );
   }
 
-  getStorages(office_id: number) {
+  getStorages(office_id: number): Observable<Data1[]> {
     return this._http
       .get<Data1[]>(`offices?office_id=${office_id}`)
       .pipe(shareReplay(1));
   }
 
-  getDatesAndQuantities(wh_id: number, range: Range) {
+  getDatesAndQuantities(wh_id: number, range: Range): Observable<Data1[]> {
     const from = range.start
       ? `&dt_date_gte=${range.start.getFullYear()}-${
           range.start.getMonth() + 1 < 10
