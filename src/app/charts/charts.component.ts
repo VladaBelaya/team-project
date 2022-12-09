@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { delay, Observable, of, switchMap } from 'rxjs';
-import { ChartConfig, ChartsService } from '../services/charts.service';
-import { ActivatedRoute } from '@angular/router';
+import {Component, Inject} from '@angular/core';
+import {delay, Observable, switchMap} from 'rxjs';
+import {ChartConfig, ChartsService} from '../services/charts.service';
+import {ActivatedRoute} from '@angular/router';
 
 export interface Data {
   labels: number[];
@@ -20,11 +20,12 @@ interface Datasets {
   selector: 'app-charts',
   templateUrl: './charts.component.html',
   styleUrls: ['./charts.component.scss'],
+  providers: [ChartsService]
 })
 export class ChartsComponent {
   public charts$: Observable<[ChartConfig]> =
     this.activatedRoute.queryParams.pipe(
-      switchMap(({ type, id }) => {
+      switchMap(({type, id}) => {
         if (type) {
           const paramsID =
             type === 'offices' ? `office_id=${id}` : `wh_id=${id}`;
@@ -36,7 +37,8 @@ export class ChartsComponent {
     );
 
   constructor(
-    private chartsService: ChartsService,
+    @Inject(ChartsService) private chartsService: ChartsService,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+  }
 }
