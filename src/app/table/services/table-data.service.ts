@@ -90,7 +90,7 @@ export class TableDataService {
       ? `&dt_date_gte=${range.start.getFullYear()}-${
           range.start.getMonth() + 1 < 10
             ? '0' + (range.start.getMonth() + 1)
-            : range.start.getMonth()
+            : range.start.getMonth() + 1
         }-${
           range.start.getDate() < 10
             ? '0' + range.start.getDate()
@@ -101,7 +101,7 @@ export class TableDataService {
       ? `&dt_date_lte=${range.end.getFullYear()}-${
           range.end.getMonth() + 1 < 10
             ? '0' + (range.end.getMonth() + 1)
-            : range.end.getMonth()
+            : range.end.getMonth() + 1
         }-${
           range.end.getDate() < 10
             ? '0' + range.end.getDate()
