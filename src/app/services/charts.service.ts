@@ -2,15 +2,18 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {map, Observable, ReplaySubject, shareReplay, takeUntil, tap} from 'rxjs';
 import {HttpClient} from "@angular/common/http";
 
-interface Data1 {
+export enum ChartFilters {
+  ORDER = 'qty',
+}
+interface ChartsData {
   office_id: number;
   wh_id: number;
-  dt_date?: string;
+  dt_date: string;
   qty: number;
 }
 
 interface DataArgumentId {
-  [id: string]: Data1[];
+  [id: string]: ChartsData[];
 }
 
 export interface ChartDatasets {
@@ -29,18 +32,15 @@ export interface ChartConfig {
 }
 
 @Injectable()
-export class ChartsService implements OnDestroy {
-  private destroy$ = new ReplaySubject(1)
-
+export class ChartsService {
   private data_layer_1_URL = 'warehouses';
-  public initialData: Data1[] = [];
+  public initialData: ChartsData[] = [];
   public charts$: Observable<[ChartConfig]>;
-  public shareData$ = this._http.get<Data1[]>(this.data_layer_1_URL).pipe(
-    tap((result: any) => {
+  public shareData$ = this._http.get<ChartsData[]>(this.data_layer_1_URL).pipe(
+    tap((result) => {
       this.initialData.push(...result);
     }),
-    shareReplay(1),
-    takeUntil(this.destroy$)
+    shareReplay(1)
   );
 
   constructor(private readonly _http: HttpClient) {
@@ -48,17 +48,12 @@ export class ChartsService implements OnDestroy {
       map((response) => {
           return [
             ...this.groupByWhId(
-              this.groupByKey(response, (response: Data1) => response.wh_id)
+              this.groupByKey(response, (response: ChartsData) => response.wh_id)
             ),
           ] as [ChartConfig]
         }
       )
     );
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(1)
-    this.destroy$.complete()
   }
 
   public groupByWhId(data: DataArgumentId): ChartConfig[] {
@@ -89,56 +84,53 @@ export class ChartsService implements OnDestroy {
       )
     );
   }
+  private setLabel(label: ChartFilters): string {
+    switch (label) {
+      case ChartFilters.ORDER:
+        return 'Заказы';
+      default:
+        return '';
+    }
+  }
 
-  public groupByOfficeId(data: DataArgumentId): ChartConfig[] {
-    return Object.keys(data).map((id) =>
-      data[id].reduce(
-        (accumulator, current) => {
-          accumulator.id = current.office_id;
-          accumulator.name = `ID офиса: ${current.office_id}`;
-
-          accumulator.datasets[0].data.push(current.qty);
-          if (current.dt_date != null && accumulator.labels.indexOf(current.dt_date) == -1) {
-            accumulator.labels.push(current.dt_date);
-          }
-          return {...accumulator};
-        },
-        {
-          id,
-          datasets: [
-            {
-              data: [],
-              label: 'Количество',
-              tension: 0.5,
-            },
-          ],
-          labels: [],
-          name: '',
-        } as ChartConfig
-      )
-    );
+  createMainCharts(data: ChartsData): ChartConfig {
+    const {office_id} = Object.values(data)[0][0]
+    const filters: ChartFilters[] = Object.values(ChartFilters);
+    const allDates: string[] = Object.keys(data);
+    const daysWithSorted: Array<ChartsData[]> = Object.values(data);
+    const mainChartsData = filters.map((key: ChartFilters) => ({
+      label: this.setLabel(key),
+      data: daysWithSorted.map((day: ChartsData[]) =>
+        day.reduce(
+          (accumulator: number, current: ChartsData) =>
+            accumulator + current[key], 0)
+      ),
+    }));
+    return {
+      id: office_id,
+      datasets: mainChartsData,
+      labels: allDates,
+      name: `График офиса ${office_id}`
+    };
   }
 
   public getChartById(type: string, id: string): Observable<[ChartConfig]> {
-    return this._http.get<Data1[]>(`warehouses?${id}`).pipe(
+    return this._http.get<ChartsData[]>(`warehouses?${id}`).pipe(
       map((response) => {
           const searchParams = type === 'offices';
           if (searchParams) {
             return [
-              ...this.groupByOfficeId(
-                this.groupByKey(response, (response: Data1) => response.office_id)
-              ),
-            ] as [ChartConfig]
+              this.createMainCharts(this.groupByKey(response, (response: ChartsData) => response.dt_date) as unknown as ChartsData)
+            ]
           } else {
             return [
               ...this.groupByWhId(
-                this.groupByKey(response, (response: Data1) => response.wh_id)
+                this.groupByKey(response, (response: ChartsData) => response.wh_id)
               ),
             ] as [ChartConfig]
           }
-
         }
-      ),
+      )
     );
   }
 
