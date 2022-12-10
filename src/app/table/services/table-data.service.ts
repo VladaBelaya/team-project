@@ -3,12 +3,6 @@ import {Injectable} from '@angular/core';
 import {map, Observable, shareReplay} from 'rxjs';
 import {Range} from '../table.component';
 
-export interface Data0 {
-  office_id: number;
-  wh_id: number;
-  qty: number;
-}
-
 export interface Data1 {
   office_id: number | null;
   wh_id: number | null;
@@ -16,7 +10,6 @@ export interface Data1 {
   qty: number | null;
 }
 
-export interface TableData extends Data1 {}
 export interface Columns {
   name: string;
   id: string;
@@ -26,7 +19,7 @@ export interface Columns {
   providedIn: 'root',
 })
 export class TableDataService {
-  public COLUMNNAMES: Columns[] = [
+  public COLUMN_NAMES: Columns[] = [
     {
       name: 'Офис',
       id: 'office_id',

@@ -2,7 +2,7 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {map, Observable, ReplaySubject, shareReplay, takeUntil, tap} from 'rxjs';
 import {HttpClient} from "@angular/common/http";
 
-export enum ChartFilters {
+export enum ChartFilter {
   ORDER = 'qty',
 }
 interface ChartsData {
@@ -84,9 +84,9 @@ export class ChartsService {
       )
     );
   }
-  private setLabel(label: ChartFilters): string {
+  private setLabel(label: ChartFilter): string {
     switch (label) {
-      case ChartFilters.ORDER:
+      case ChartFilter.ORDER:
         return 'Заказы';
       default:
         return '';
@@ -95,10 +95,10 @@ export class ChartsService {
 
   createMainCharts(data: ChartsData): ChartConfig {
     const {office_id} = Object.values(data)[0][0]
-    const filters: ChartFilters[] = Object.values(ChartFilters);
+    const filters: ChartFilter[] = Object.values(ChartFilter);
     const allDates: string[] = Object.keys(data);
     const daysWithSorted: Array<ChartsData[]> = Object.values(data);
-    const mainChartsData = filters.map((key: ChartFilters) => ({
+    const mainChartsData = filters.map((key: ChartFilter) => ({
       label: this.setLabel(key),
       data: daysWithSorted.map((day: ChartsData[]) =>
         day.reduce(

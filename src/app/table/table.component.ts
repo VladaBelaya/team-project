@@ -36,7 +36,7 @@ export class TableComponent implements OnInit {
   storageData$!: Observable<Data1[]>;
   datesAndQuantitiesData$!: Observable<Data1[]>;
   currentWhId!: number;
-  columnsToDisplay = this._tableData.COLUMNNAMES;
+  columnsToDisplay = this._tableData.COLUMN_NAMES;
   columnNames = this.columnsToDisplay.map((column) => column.id);
   columnsToDisplayWithExpand = [
     ...this.columnsToDisplay.map((column) => column.id),
