@@ -36,7 +36,7 @@
         <a
           *ngIf="column.id === 'office_id'"
           (click)="
-                    openChart(column.name, element[column.id]);
+                    openChart(column.name, element[column.id], this.from, this.to);
                     $event.stopPropagation()
                   "
           mat-icon-button>
@@ -93,7 +93,7 @@
                 <a
                   *ngIf="column.id === 'wh_id'"
                   (click)="
-                    openChart(column.name, element[column.id]);
+                    openChart(column.name, element[column.id], this.from, this.to);
                     $event.stopPropagation()
                   "
                   mat-icon-button>
@@ -154,7 +154,7 @@
                         <a
                           *ngIf="column.id === 'wh_id'"
                           (click)="
-                            openChart('Склад', element.wh_id);
+                            openChart('Склад', element.wh_id, this.from, this.to);
                             $event.stopPropagation()
                           "
                           mat-icon-button>

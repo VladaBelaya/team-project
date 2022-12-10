@@ -7,10 +7,7 @@ import {ChartsComponent} from "./charts.component";
 import {RouterModule, Routes} from "@angular/router";
 
 const routes: Routes = [
-  {
-    path: '',
-    component: ChartsComponent
-  }
+  { path: '', component: ChartsComponent }
 ];
 
 

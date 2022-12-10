@@ -25,10 +25,16 @@ interface Datasets {
 export class ChartsComponent {
   public charts$: Observable<ChartConfig[]> =
     this.activatedRoute.queryParams.pipe(
-      switchMap(({type, id}) => {
+      switchMap(({type, id, from = '', to = ''}) => {
         if (type) {
-          const paramsID =
+          let paramsID =
             type === 'offices' ? `office_id=${id}` : `wh_id=${id}`;
+          if(from) {
+            paramsID += `&dt_date_gte=${from}`
+          }
+          if(to) {
+            paramsID += `&dt_date_lte=${to}`
+          }
           return this.chartsService.getChartById(type, paramsID);
         }
         return this.chartsService.charts$;

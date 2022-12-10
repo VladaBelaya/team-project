@@ -15,9 +15,7 @@ export interface Columns {
   id: string;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class TableDataService {
   public COLUMN_NAMES: Columns[] = [
     {

@@ -30,6 +30,7 @@ export interface Range {
       ),
     ]),
   ],
+  providers: [TableDataService]
 })
 export class TableComponent implements OnInit {
   officeData$!: Observable<Data1[]>;
@@ -53,8 +54,10 @@ export class TableComponent implements OnInit {
   });
 
   dateRange: Range = this.range!.value;
+  from: string = ''
+  to: string = ''
 
-  get range() {
+  get range(){
     return this.dateRangeControl.get('range');
   }
 
@@ -79,6 +82,28 @@ export class TableComponent implements OnInit {
     if (this.currentWhId) {
       this.getDatesAndQuantities(this.currentWhId);
     }
+    this.from = this.dateRange.start
+      ? `${this.dateRange.start.getFullYear()}-${
+        this.dateRange.start.getMonth() + 1 < 10
+          ? '0' + (this.dateRange.start.getMonth() + 1)
+          : this.dateRange.start.getMonth() + 1
+      }-${
+        this.dateRange.start.getDate() < 10
+          ? '0' + this.dateRange.start.getDate()
+          : this.dateRange.start.getDate()
+      }`
+      : '';
+    this.to = this.dateRange.end
+      ? `${this.dateRange.end.getFullYear()}-${
+        this.dateRange.end.getMonth() + 1 < 10
+          ? '0' + (this.dateRange.end.getMonth() + 1)
+          : this.dateRange.end.getMonth() + 1
+      }-${
+        this.dateRange.end.getDate() < 10
+          ? '0' + this.dateRange.end.getDate()
+          : this.dateRange.end.getDate()
+      }`
+      : '';
   }
 
   onExpandOffice(element: Data1, $event: MouseEvent) {
@@ -123,12 +148,14 @@ export class TableComponent implements OnInit {
     }
   }
 
-  openChart(type: string, id: string) {
+  openChart(type: string, id: string, from: string, to: string) {
     type = this.getType(type);
     this._router.navigate(['/charts'], {
       queryParams: {
         type,
         id,
+        from,
+        to
       },
     });
   }

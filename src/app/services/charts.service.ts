@@ -33,7 +33,7 @@ export interface ChartConfig {
 
 @Injectable()
 export class ChartsService {
-  private data_layer_1_URL = 'warehouses';
+  private data_layer_1_URL: string = 'warehouses';
   public initialData: ChartsData[] = [];
   public charts$: Observable<ChartConfig[]>;
   public shareData$ = this._http.get<ChartsData[]>(this.data_layer_1_URL).pipe(
