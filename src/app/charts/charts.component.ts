@@ -23,7 +23,7 @@ interface Datasets {
   providers: [ChartsService]
 })
 export class ChartsComponent {
-  public charts$: Observable<[ChartConfig]> =
+  public charts$: Observable<ChartConfig[]> =
     this.activatedRoute.queryParams.pipe(
       switchMap(({type, id}) => {
         if (type) {
@@ -33,7 +33,7 @@ export class ChartsComponent {
         }
         return this.chartsService.charts$;
       }),
-      delay(250)
+      delay(750)
     );
 
   constructor(

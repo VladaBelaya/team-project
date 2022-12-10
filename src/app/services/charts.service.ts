@@ -35,7 +35,7 @@ export interface ChartConfig {
 export class ChartsService {
   private data_layer_1_URL = 'warehouses';
   public initialData: ChartsData[] = [];
-  public charts$: Observable<[ChartConfig]>;
+  public charts$: Observable<ChartConfig[]>;
   public shareData$ = this._http.get<ChartsData[]>(this.data_layer_1_URL).pipe(
     tap((result) => {
       this.initialData.push(...result);
@@ -50,7 +50,7 @@ export class ChartsService {
             ...this.groupByWhId(
               this.groupByKey(response, (response: ChartsData) => response.wh_id)
             ),
-          ] as [ChartConfig]
+          ] as ChartConfig[]
         }
       )
     );
@@ -114,7 +114,7 @@ export class ChartsService {
     };
   }
 
-  public getChartById(type: string, id: string): Observable<[ChartConfig]> {
+  public getChartById(type: string, id: string): Observable<ChartConfig[]> {
     return this._http.get<ChartsData[]>(`warehouses?${id}`).pipe(
       map((response) => {
           const searchParams = type === 'offices';
@@ -127,7 +127,7 @@ export class ChartsService {
               ...this.groupByWhId(
                 this.groupByKey(response, (response: ChartsData) => response.wh_id)
               ),
-            ] as [ChartConfig]
+            ] as ChartConfig[]
           }
         }
       )
