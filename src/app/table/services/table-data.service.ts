@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { map, Observable, shareReplay } from 'rxjs';
-import { Range } from '../table.component';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {map, Observable, shareReplay} from 'rxjs';
+import {Range} from '../table.component';
 
 export interface Data0 {
   office_id: number;
@@ -114,13 +114,12 @@ export class TableDataService {
         map((data) =>
           data.map((datum) => {
             const date = new Date(Date.parse(datum.dt_date!));
-            const result = date.toLocaleDateString('en-GB', {
+            datum.dt_date = date.toLocaleDateString('en-GB', {
               // you can use undefined as first argument
               year: 'numeric',
               month: '2-digit',
               day: '2-digit',
             });
-            datum.dt_date = result;
             datum.office_id = null;
             return datum;
           })
